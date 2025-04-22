@@ -19,8 +19,14 @@ y = (screen_height / 2) - (window_height / 2)
 
 window.geometry(f"{window_width}x{window_height}+{int(x)}+{int(y)}")
 
-textbox = CTk.CTkTextbox(window, width=390, height=400, wrap='word')
-textbox.pack()
+forget_label = CTk.CTkLabel(window, text="JoltNotes: Lite", font=("Arial", 16, "bold"), text_color="white")
+forget_label.place(relx=0.5, rely=0.025, anchor="center")
+
+version_label = CTk.CTkLabel(window, text="v1.0", font=("Arial", 16, "bold"), text_color="white")
+version_label.place(relx=0.5, rely=0.07, anchor="center")
+
+textbox = CTk.CTkTextbox(window, width=390, height=400, wrap='word', fg_color='#171717')
+textbox.place(rely=0.093, relx=0.013)
 
 textbox.insert("0.0", "Hello")
 text = textbox.get("0.0", "end")
@@ -52,10 +58,10 @@ def load_note():
 def enter_event():
     print('pressed')
 
-save_button = CTk.CTkButton(window, text='Save', command=save_note)
+save_button = CTk.CTkButton(window, text='Save', command=save_note, bg_color='#171717')
 save_button.place(relx=0.6, rely=0.9)
 
-load_button = CTk.CTkButton(window, text='Load', command=load_note)
+load_button = CTk.CTkButton(window, text='Load', command=load_note, bg_color='#171717')
 load_button.place(relx=0.05, rely=0.9)
 
 load_note()
