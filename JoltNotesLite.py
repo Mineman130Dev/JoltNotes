@@ -4,7 +4,13 @@ from appdirs import user_data_dir
 
 window = CTk.CTk()
 window.title("JoltNotes Lite - macOS(Intel)")
-window.attributes("-topmost", True)
+
+def bring_to_front_non_topmost():
+    window.attributes('-topmost', True)
+    window.lift()
+    window.attributes('-topmost', False)
+
+window.resizable(False, False)
 
 window.configure(fg_color='#3C3D37')
 
@@ -19,6 +25,9 @@ y = (screen_height / 2) - (window_height / 2)
 
 window.geometry(f"{window_width}x{window_height}+{int(x)}+{int(y)}")
 
+toolbar = CTk.CTkFrame(window, height=25)
+toolbar.pack(fill="x", side="top")
+
 textbox = CTk.CTkTextbox(window, wrap='word', fg_color='#171717')
 textbox.pack(fill='both', expand=True)
 
@@ -32,7 +41,16 @@ data_dir = user_data_dir(app_name, app_author)
 os.makedirs(data_dir, exist_ok=True)
 filepath = os.path.join(data_dir, "notes.txt")
 
-def save_note(event=None):
+save_timer = None
+debounce_delay = 1000  # milliseconds
+
+def save_note_debounced(event=None):
+    global save_timer
+    if save_timer:
+        window.after_cancel(save_timer)
+    save_timer = window.after(debounce_delay, save_note)
+
+def save_note():
     text_to_save = textbox.get("0.0", "end")
     try:
         with open(filepath, 'w') as file:
@@ -53,14 +71,20 @@ def load_note():
     except Exception as e:
         print(f'Error Loading Note: {e}')
 
-#save_button = CTk.CTkButton(window, text='Save', command=save_note, bg_color='#171717')
-#save_button.place(relx=0.6, rely=0.9)
+def on_key_press(event):
+    new_window = CTk.CTkToplevel()
+    new_window.title("Settings")
+    new_window.geometry("300x200")
+
+window.bind("<s>", on_key_press)
 
 #load_button = CTk.CTkButton(window, text='**Load**', command=load_note, bg_color='#171717')
 #load_button.place(relx=0.05, rely=0.9)
 
-textbox.bind("<KeyRelease>", save_note)
+textbox.bind("<KeyRelease>", save_note_debounced)
 
 load_note()
+
+window.after(100, bring_to_front_non_topmost)
 
 window.mainloop()
