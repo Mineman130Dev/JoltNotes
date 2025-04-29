@@ -25,8 +25,8 @@ y = (screen_height / 2) - (window_height / 2)
 
 window.geometry(f"{window_width}x{window_height}+{int(x)}+{int(y)}")
 
-toolbar = CTk.CTkFrame(window, height=25)
-toolbar.pack(fill="x", side="top")
+#toolbar = CTk.CTkFrame(window, height=25)
+#toolbar.pack(fill="x", side="top")
 
 textbox = CTk.CTkTextbox(window, wrap='word', fg_color='#171717')
 textbox.pack(fill='both', expand=True)
@@ -71,12 +71,13 @@ def load_note():
     except Exception as e:
         print(f'Error Loading Note: {e}')
 
-def on_key_press(event):
+def open_settings(event):
     new_window = CTk.CTkToplevel()
     new_window.title("Settings")
     new_window.geometry("300x200")
 
-window.bind("<s>", on_key_press)
+setting_button = CTk.CTkButton(toolbar, text='settings', command=open_settings)
+setting_button.pack()
 
 #load_button = CTk.CTkButton(window, text='**Load**', command=load_note, bg_color='#171717')
 #load_button.place(relx=0.05, rely=0.9)
