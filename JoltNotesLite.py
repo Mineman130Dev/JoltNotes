@@ -3,9 +3,8 @@ import os
 from appdirs import user_data_dir
 
 window = CTk.CTk()
-window.title("JoltNotes Lite v1.0")
+window.title("JoltNotes Lite - macOS(Intel)")
 window.attributes("-topmost", True)
-window.resizable(False, False)
 
 window.configure(fg_color='#3C3D37')
 
@@ -20,26 +19,20 @@ y = (screen_height / 2) - (window_height / 2)
 
 window.geometry(f"{window_width}x{window_height}+{int(x)}+{int(y)}")
 
-forget_label = CTk.CTkLabel(window, text="JoltNotes Lite", font=("Arial", 16, "bold"), text_color="white")
-forget_label.place(relx=0.5, rely=0.025, anchor="center")
-
-version_label = CTk.CTkLabel(window, text="MacOS - Intel", font=("Arial", 16, "bold"), text_color="white")
-version_label.place(relx=0.5, rely=0.07, anchor="center")
-
-textbox = CTk.CTkTextbox(window, width=390, height=400, wrap='word', fg_color='#171717')
-textbox.place(rely=0.093, relx=0.013)
+textbox = CTk.CTkTextbox(window, wrap='word', fg_color='#171717')
+textbox.pack(fill='both', expand=True)
 
 textbox.insert("0.0", "Hello")
 text = textbox.get("0.0", "end")
 textbox.delete("0.0", "end") 
 
-app_name = "Jolt Notes Lite"
+app_name = "JoltNotes Lite"
 app_author = "Mineman130"
 data_dir = user_data_dir(app_name, app_author)
 os.makedirs(data_dir, exist_ok=True)
 filepath = os.path.join(data_dir, "notes.txt")
 
-def save_note():
+def save_note(event=None):
     text_to_save = textbox.get("0.0", "end")
     try:
         with open(filepath, 'w') as file:
@@ -60,11 +53,13 @@ def load_note():
     except Exception as e:
         print(f'Error Loading Note: {e}')
 
-save_button = CTk.CTkButton(window, text='Save', command=save_note, bg_color='#171717')
-save_button.place(relx=0.6, rely=0.9)
+#save_button = CTk.CTkButton(window, text='Save', command=save_note, bg_color='#171717')
+#save_button.place(relx=0.6, rely=0.9)
 
-load_button = CTk.CTkButton(window, text='Load', command=load_note, bg_color='#171717')
-load_button.place(relx=0.05, rely=0.9)
+#load_button = CTk.CTkButton(window, text='**Load**', command=load_note, bg_color='#171717')
+#load_button.place(relx=0.05, rely=0.9)
+
+textbox.bind("<KeyRelease>", save_note)
 
 load_note()
 
