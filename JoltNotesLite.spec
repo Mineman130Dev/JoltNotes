@@ -32,7 +32,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['JoltNotesLite.icns'],
+    icon=['JoltNotes.icns'],
 )
 coll = COLLECT(
     exe,
@@ -45,7 +45,7 @@ coll = COLLECT(
 )
 app = BUNDLE(
     coll,
-    name='JoltNotes Lite.app',
-    icon='JoltNotesLite.icns',
+    name='JoltNotesLite.app',
+    icon='JoltNotes.icns',
     bundle_identifier=None,
 )
