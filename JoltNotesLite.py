@@ -15,8 +15,6 @@ def bring_to_front_non_topmost():
 
 window.resizable(False, False)
 
-window.configure(fg_color='#3C3D37')
-
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
 
@@ -94,6 +92,15 @@ def delete_line(event=None):
     except Exception as e:
         print(f"Error deleting line: {e}")
 
+def open_mini():
+    mini_window = CTk.CTkToplevel(window)
+    mini_window.title("Mini Jolt")
+    textbox = CTk.CTkTextbox(mini_window, wrap='word', fg_color='#171717')
+    textbox.pack(fill='both', expand=True)
+    mini_window.geometry("200x200")
+    mini_window.resizable(False, False)
+    mini_window.attributes('-topmost', True)
+
 italic_button = CTk.CTkButton(toolbar, text='I', command=italicize_text, fg_color='transparent', hover_color="#48b5ff", width=30)
 italic_button.pack(side='right', padx=5)
 
@@ -107,6 +114,7 @@ textbox.bind("<KeyRelease>", save_note_debounced)
 
 textbox.bind('<Command-BackSpace>', delete_line)
 textbox.bind('<Control-BackSpace>', delete_line)
+window.bind('<Command-s>', lambda event: open_mini()) 
 
 load_note()
 
