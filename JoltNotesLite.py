@@ -206,7 +206,7 @@ def settings_menu():
     dark_button = CTk.CTkButton(window, text='Dark', command=color_change_dark, fg_color='transparent', hover_color="#48b5ff", width=30)
     dark_button.pack()
     
-    white_button = CTk.CTkButton(window, text='Artic White', command=color_change_white, fg_color='transparent', hover_color="#48b5ff", width=30)
+    white_button = CTk.CTkButton(window, text='Arctic White', command=color_change_white, fg_color='transparent', hover_color="#48b5ff", width=30)
     white_button.pack()
 
     red_button = CTk.CTkButton(window, text='Blood Red', command=color_change_red, fg_color='transparent', hover_color="#48b5ff", width=30)
