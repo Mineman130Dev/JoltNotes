@@ -10,6 +10,8 @@ import webbrowser
 window = CTk.CTk()
 window.title("JoltNotes Lite - macOS(Intel)")
 
+mini_window = None
+mini_textbox = None
 
 def bring_to_front_non_topmost():
     window.attributes('-topmost', True)
@@ -47,11 +49,12 @@ app_author = "Mineman130"
 data_dir = user_data_dir(app_name, app_author)
 os.makedirs(data_dir, exist_ok=True)
 filepath = os.path.join(data_dir, "notes.json")
-settings_path = os.path.join(data_dir, "settings.json")  # New file for settings
+settings_path = os.path.join(data_dir, "settings.json")
 
 save_timer = None
 debounce_delay = 300  # milliseconds
 show_settings = False
+show_menu = False
 
 button_underlined_font = CTk.CTkFont(family="Helvetica", size=13, underline=True)
 
@@ -64,35 +67,27 @@ def save_note_debounced(event=None):
 def save_note():
     """Save both text and formatting information to a JSON file"""
     try:
-        # Access the underlying Tkinter text widget
         tk_text = textbox._textbox
         
-        # Get the text content
         content = tk_text.get("0.0", "end")
         
-        # Create a structure to store formatting
         formatted_data = {
             "content": content,
             "formatting": []
         }
         
-        # Get all tag names
         all_tags = tk_text.tag_names()
         format_tags = [tag for tag in all_tags if tag.startswith("format_")]
         
-        # For each format tag, store its range and properties
         for tag in format_tags:
-            # Find the ranges this tag applies to
             tag_ranges = tk_text.tag_ranges(tag)
             
-            # Convert ranges to string format
             ranges = []
             for i in range(0, len(tag_ranges), 2):
                 start = str(tag_ranges[i])
                 end = str(tag_ranges[i+1])
                 ranges.append((start, end))
             
-            # Determine the format type from the tag name
             format_type = None
             if tag.startswith("format_bold_"):
                 format_type = "bold"
@@ -109,14 +104,12 @@ def save_note():
             elif tag.startswith("format_heading3_"):
                 format_type = "heading3"
             
-            # Store the format information
             if format_type and ranges:
                 formatted_data["formatting"].append({
                     "type": format_type,
                     "ranges": ranges
                 })
         
-        # Save to JSON file
         with open(filepath, 'w') as file:
             json.dump(formatted_data, file, indent=2)
         
@@ -124,18 +117,16 @@ def save_note():
     except Exception as e:
         print(f"Error saving note: {e}")
 
-# Settings frame setup
 settings_frame = CTk.CTkFrame(window)
 settings_frame.pack_forget()
 show_settings = False
+show_menu = False
 
 theme_label = CTk.CTkLabel(settings_frame, text="Themes", text_color='white')
 theme_label.pack()
 
-# Default theme
 DEFAULT_THEME = "JoltNotes"
 
-# Theme change functions
 def color_change_JoltNotes():
     toolbar.configure(fg_color='#262626')
     window.configure(fg_color='#171717')
@@ -160,6 +151,11 @@ def color_change_JoltNotes():
     settings_menu_button.configure(text_color='white')
     settings_menu_button.configure(hover_color='#48b5ff')
     website_button.configure(text_color='white')
+    if mini_window != None:
+        mini_window.configure(fg_color='#171717')
+    if mini_textbox != None:
+        mini_textbox.configure(text_color='white')
+        mini_textbox.configure(fg_color='#171717')
     save_theme("JoltNotes")
 
 def color_change_dark():
@@ -186,6 +182,11 @@ def color_change_dark():
     settings_menu_button.configure(text_color='white')
     settings_menu_button.configure(hover_color='#48b5ff')
     website_button.configure(text_color='white')
+    if mini_window != None:
+        mini_window.configure(fg_color='#171717')
+    if mini_textbox != None:
+        mini_textbox.configure(text_color='white')
+        mini_textbox.configure(fg_color='#171717')
     save_theme("dark")
 
 def color_change_super_dark():
@@ -212,6 +213,11 @@ def color_change_super_dark():
     settings_menu_button.configure(text_color='white')
     settings_menu_button.configure(hover_color='#48b5ff')
     website_button.configure(text_color='white')
+    if mini_window != None:
+        mini_window.configure(fg_color='black')
+    if mini_textbox != None:
+        mini_textbox.configure(text_color='white')
+        mini_textbox.configure(fg_color='black')
     save_theme("super_dark")
 
 def color_change_white():
@@ -238,6 +244,11 @@ def color_change_white():
     settings_menu_button.configure(text_color='black')
     settings_menu_button.configure(hover_color='#48b5ff')
     website_button.configure(text_color='white')
+    if mini_window != None:
+        mini_window.configure(fg_color='#F1F1F1')
+    if mini_textbox != None:
+        mini_textbox.configure(text_color='black')
+        mini_textbox.configure(fg_color='#F1F1F1')
     save_theme("white")
 
 def color_change_earth():
@@ -264,6 +275,11 @@ def color_change_earth():
     settings_menu_button.configure(text_color='#4a5568')
     settings_menu_button.configure(hover_color='white')
     website_button.configure(text_color='white')
+    if mini_window != None:
+        mini_window.configure(fg_color='#f5f5f5')
+    if mini_textbox != None:
+        mini_textbox.configure(text_color='#4a5568`1')
+        mini_textbox.configure(fg_color='#f5f5f5')
     save_theme("mutedearth")
 
 def color_change_orange():
@@ -290,6 +306,11 @@ def color_change_orange():
     settings_menu_button.configure(text_color='#FFB000')
     settings_menu_button.configure(hover_color='#bd8200')
     website_button.configure(text_color='#FFB000')
+    if mini_window != None:
+        mini_window.configure(fg_color='#282828')
+    if mini_textbox != None:
+        mini_textbox.configure(text_color='#FFB000')
+        mini_textbox.configure(fg_color='#282828')
     save_theme("orange")
 
 def color_change_green():
@@ -316,6 +337,11 @@ def color_change_green():
     settings_menu_button.configure(text_color='#00FF66')
     settings_menu_button.configure(hover_color='#00b849')
     website_button.configure(text_color='#00FF66')
+    if mini_window != None:
+        mini_window.configure(fg_color='#282828')
+    if mini_textbox != None:
+        mini_textbox.configure(text_color='#00FF66')
+        mini_textbox.configure(fg_color='#282828')
     save_theme("green")
 
 def color_change_pink():
@@ -342,7 +368,108 @@ def color_change_pink():
     settings_menu_button.configure(text_color='black')
     settings_menu_button.configure(hover_color='white')
     website_button.configure(text_color='white')
+    if mini_window != None:
+        mini_window.configure(fg_color='#FFC1DA')
+    if mini_textbox != None:
+        mini_textbox.configure(text_color='white')
+        mini_textbox.configure(fg_color='#FFC1DA')
     save_theme("pink")
+
+def color_change_earthy():
+    toolbar.configure(fg_color='#AEC8A4')
+    window.configure(fg_color='#c5e3ba')
+    textbox.configure(fg_color='#c5e3ba', text_color='#8A784E')
+    theme_label.configure(text_color='#8A784E')
+    bold_button.configure(text_color='#8A784E')
+    bold_button.configure(hover_color='#c5e3ba')
+    italic_button.configure(text_color='#8A784E')
+    italic_button.configure(hover_color='#c5e3ba')
+    underline_button.configure(text_color='#8A784E')
+    underline_button.configure(hover_color='#c5e3ba')
+    heading_button.configure(text_color='#8A784E')
+    heading_button.configure(hover_color='#c5e3ba')
+    heading2_button.configure(text_color='#8A784E')
+    heading2_button.configure(hover_color='#c5e3ba')
+    heading3_button.configure(text_color='#8A784E')
+    heading3_button.configure(hover_color='#c5e3ba')
+    strickethrough_button.configure(text_color='#8A784E')
+    strickethrough_button.configure(hover_color='#c5e3ba')
+    menu_button.configure(text_color='#8A784E')
+    menu_button.configure(hover_color='#c5e3ba')
+    settings_menu_button.configure(text_color='#8A784E')
+    settings_menu_button.configure(hover_color='#c5e3ba')
+    website_button.configure(text_color='#8A784E')
+    website_button.configure(hover_color='#c5e3ba')
+    if mini_window != None:
+        mini_window.configure(fg_color='#E7EFC7')
+    if mini_textbox != None:
+        mini_textbox.configure(text_color='#8A784E')
+        mini_textbox.configure(fg_color='#E7EFC7')
+    save_theme("earthy")
+
+def color_change_velvet():
+    toolbar.configure(fg_color='#4A102A')
+    window.configure(fg_color='#85193C')
+    textbox.configure(fg_color='#85193C', text_color='white')
+    theme_label.configure(text_color='white')
+    bold_button.configure(text_color='white')
+    bold_button.configure(hover_color='#85193C')
+    italic_button.configure(text_color='white')
+    italic_button.configure(hover_color='#85193C')
+    underline_button.configure(text_color='white')
+    underline_button.configure(hover_color='#85193C')
+    heading_button.configure(text_color='white')
+    heading_button.configure(hover_color='#85193C')
+    heading2_button.configure(text_color='white')
+    heading2_button.configure(hover_color='#85193C')
+    heading3_button.configure(text_color='white')
+    heading3_button.configure(hover_color='#85193C')
+    strickethrough_button.configure(text_color='white')
+    strickethrough_button.configure(hover_color='#85193C')
+    menu_button.configure(text_color='white')
+    menu_button.configure(hover_color='#85193C')
+    settings_menu_button.configure(text_color='white')
+    settings_menu_button.configure(hover_color='#85193C')
+    website_button.configure(text_color='white')
+    website_button.configure(hover_color='#85193C')
+    if mini_window != None:
+        mini_window.configure(fg_color='#85193C')
+    if mini_textbox != None:
+        mini_textbox.configure(text_color='white')
+        mini_textbox.configure(fg_color='#85193C')
+    save_theme("velvet")
+
+def color_change_menlon():
+    toolbar.configure(fg_color='#4edb1f')
+    window.configure(fg_color='#FFAAAA')
+    textbox.configure(fg_color='#FFAAAA', text_color='black')
+    theme_label.configure(text_color='#399918')
+    bold_button.configure(text_color='#399918')
+    bold_button.configure(hover_color='#ECFFE6')
+    italic_button.configure(text_color='#399918')
+    italic_button.configure(hover_color='#ECFFE6')
+    underline_button.configure(text_color='#399918')
+    underline_button.configure(hover_color='#ECFFE6')
+    heading_button.configure(text_color='#399918')
+    heading_button.configure(hover_color='#ECFFE6')
+    heading2_button.configure(text_color='#399918')
+    heading2_button.configure(hover_color='#ECFFE6')
+    heading3_button.configure(text_color='#399918')
+    heading3_button.configure(hover_color='#ECFFE6')
+    strickethrough_button.configure(text_color='#399918')
+    strickethrough_button.configure(hover_color='#ECFFE6')
+    menu_button.configure(text_color='#399918')
+    menu_button.configure(hover_color='#ECFFE6')
+    settings_menu_button.configure(text_color='#399918')
+    settings_menu_button.configure(hover_color='#ECFFE6')
+    website_button.configure(text_color='#399918')
+    website_button.configure(hover_color='#ECFFE6')
+    if mini_window != None:
+        mini_window.configure(fg_color='#FFAAAA')
+    if mini_textbox != None:
+        mini_textbox.configure(text_color='black')
+        mini_textbox.configure(fg_color='#FFAAAA')
+    save_theme("menlon")
 
 # Theme button
 theme_buttons = [
@@ -354,6 +481,9 @@ theme_buttons = [
     ("Terminal Amber", color_change_orange, 'white'),
     ("Terminal Green", color_change_green, 'white'),
     ("Pretty Pink", color_change_pink, 'white'),
+    ("Earthy Green", color_change_earthy, 'white'),
+    ("Red Velvet", color_change_velvet, 'white'),
+    ("Watermelon Vibes", color_change_menlon, 'white'),
 ]
 
 for text, command, text_color in theme_buttons:
@@ -368,12 +498,22 @@ for text, command, text_color in theme_buttons:
     )
     button.pack()
 
+base_font_family = "Helvetica"
+base_font_size = 12
+
+FONT_NORMAL = tkFont.Font(family=base_font_family, size=base_font_size)
+FONT_BOLD = tkFont.Font(family=base_font_family, size=base_font_size, weight="bold")
+FONT_ITALIC = tkFont.Font(family=base_font_family, size=base_font_size, slant="italic")
+FONT_BOLD_ITALIC = tkFont.Font(family=base_font_family, size=base_font_size, weight="bold", slant="italic")
+FONT_HEADING = tkFont.Font(family=base_font_family, size=25, weight="bold")
+FONT_HEADING2 = tkFont.Font(family=base_font_family, size=20, weight="bold")
+FONT_HEADING3 = tkFont.Font(family=base_font_family, size=17, weight="bold")
+
+# --- Modified load_note function ---
 def load_note():
-    """Load text and formatting from the JSON file"""
     try:
-        # Check if the file exists
         if not os.path.exists(filepath):
-            # If we're migrating from the old .txt format, try loading that
+            # ... (your existing migration logic)
             old_filepath = os.path.join(data_dir, "notes.txt")
             if os.path.exists(old_filepath):
                 with open(old_filepath, "r") as file:
@@ -382,46 +522,48 @@ def load_note():
                     textbox.insert('0.0', loaded_text)
                 print(f'Migrated from old note format: {old_filepath}')
             return
-        
-        # Load the JSON data
+
         with open(filepath, "r") as file:
             data = json.load(file)
-        
-        # Clear the current text and insert the content
+
         textbox.delete('0.0', 'end')
         textbox.insert('0.0', data.get("content", ""))
-        
-        # Access the underlying Tkinter text widget
+
         tk_text = textbox._textbox
-        
-        # Apply formatting
+
+        # Clear all existing tags before applying new ones to prevent conflicts from previous loads
+        for tag in tk_text.tag_names():
+            if tag.startswith("format_"): # Assuming all your custom format tags start with "format_"
+                tk_text.tag_remove(tag, "1.0", "end")
+
         for format_item in data.get("formatting", []):
             format_type = format_item.get("type")
             ranges = format_item.get("ranges", [])
-            
+
             for start, end in ranges:
-                # Create a unique tag name
                 tag_name = f"format_{format_type}_{start.replace('.', '_')}_{end.replace('.', '_')}"
-                
-                # Configure the tag based on format type
-                if format_type == "bold":
-                    tk_text.tag_configure(tag_name, font=tkFont.Font(family="Helvetica", weight="bold"))
-                elif format_type == "italic":
-                    tk_text.tag_configure(tag_name, font=tkFont.Font(family="Helvetica", slant="italic"))
-                elif format_type == "underline":
-                    tk_text.tag_configure(tag_name, underline=True)
-                elif format_type == "overstrike":
-                    tk_text.tag_configure(tag_name, overstrike=True)
-                elif format_type == "heading":
-                    tk_text.tag_configure(tag_name, font=tkFont.Font(family="Helvetica", size=25, weight="bold"))
-                elif format_type == "heading2":
-                    tk_text.tag_configure(tag_name, font=tkFont.Font(family="Helvetica", size=20, weight="bold"))
-                elif format_type == "heading3":
-                    tk_text.tag_configure(tag_name, font=tkFont.Font(family="Helvetica", size=15, weight="bold"))
-                
+
+                # Configure the tag with specific font objects or attributes
+                # Ensure the tag doesn't already exist before configuring
+                if tag_name not in tk_text.tag_names():
+                    if format_type == "bold":
+                        tk_text.tag_configure(tag_name, font=FONT_BOLD)
+                    elif format_type == "italic":
+                        tk_text.tag_configure(tag_name, font=FONT_ITALIC)
+                    elif format_type == "underline":
+                        tk_text.tag_configure(tag_name, underline=True) # Underline is a simple boolean attribute
+                    elif format_type == "overstrike":
+                        tk_text.tag_configure(tag_name, overstrike=True) # Overstrike is a simple boolean attribute
+                    elif format_type == "heading":
+                        tk_text.tag_configure(tag_name, font=FONT_HEADING)
+                    elif format_type == "heading2":
+                        tk_text.tag_configure(tag_name, font=FONT_HEADING2)
+                    elif format_type == "heading3":
+                        tk_text.tag_configure(tag_name, font=FONT_HEADING3)
+
                 # Apply the tag
                 tk_text.tag_add(tag_name, start, end)
-        
+
         print(f'Note loaded with formatting from: {filepath}')
     except json.JSONDecodeError:
         print("Error decoding JSON file. The file might be corrupted.")
@@ -429,7 +571,6 @@ def load_note():
         print(f'Error loading note: {e}')
 
 def apply_format_to_selection(format_type):
-    """Apply formatting to selected text with toggle support and format switching"""
     try:
         # Access the underlying Tkinter text widget
         tk_text = textbox._textbox
@@ -546,6 +687,41 @@ def toggle_settings():
         settings_frame.pack_forget()
         textbox.pack(fill='both', expand=True)
 
+current_view = "textbox" # "textbox", "settings", "notes_list"
+
+def set_current_view(view_name):
+    global current_view
+    
+    # Hide all possible content frames first
+    textbox.pack_forget()
+    settings_frame.pack_forget()
+    notes_list_main_frame.pack_forget() # The new notes list frame
+
+    # Pack the requested view
+    if view_name == "textbox":
+        textbox.pack(fill='both', expand=True)
+    elif view_name == "settings":
+        settings_frame.pack(fill='both', expand=True, pady=20) # Use fill/expand for settings frame
+    elif view_name == "notes_list":
+        populate_notes_list_frame() # Re-populate the list each time it's shown
+        notes_list_main_frame.pack(fill='both', expand=True, pady=20) # Use fill/expand for notes list frame
+    
+    current_view = view_name
+    print(f"Current view set to: {current_view}")
+
+# --- Modified Toggle Functions ---
+def toggle_settings():
+    if current_view == "settings":
+        set_current_view("textbox")
+    else:
+        set_current_view("settings")
+
+def toggle_notes_list():
+    if current_view == "notes_list":
+        set_current_view("textbox")
+    else:
+        set_current_view("notes_list")
+
 def open_mini():
     global mini_window
     global mini_textbox
@@ -584,7 +760,7 @@ italic_button.pack(side='right', padx=5)
 bold_button = CTk.CTkButton(toolbar, text='B', command=bold_text, fg_color='transparent', hover_color="#48b5ff", width=30)
 bold_button.pack(side='right', padx=5)
 
-menu_button = CTk.CTkButton(toolbar, text='<', command=None, fg_color='transparent', hover_color="#48b5ff", width=30)
+menu_button = CTk.CTkButton(toolbar, text='<', command=toggle_notes_list, fg_color='transparent', hover_color="#48b5ff", width=30)
 menu_button.pack(side='left', padx=5)
 
 settings_menu_button = CTk.CTkButton(toolbar, text='⚙️', command=toggle_settings, fg_color='transparent', hover_color="#48b5ff", width=30)
@@ -595,8 +771,43 @@ textbox.bind("<KeyRelease>", save_note_debounced)
 textbox.bind('<Command-BackSpace>', delete_line)
 textbox.bind('<Control-BackSpace>', delete_line)
 window.bind('<Command-s>', lambda event: open_mini()) 
+window.bind('<Control-s>', lambda event: open_mini())
 
-# Function to save the current theme
+notes_list_main_frame = CTk.CTkScrollableFrame(window)
+
+# --- Populate Notes List Frame (NEW) ---
+def populate_notes_list_frame():
+    for widget in notes_list_main_frame.winfo_children():
+        widget.destroy()
+
+    CTk.CTkLabel(notes_list_main_frame, text="Your Notes", font=("Helvetica", 20, "bold")).pack(pady=(10, 15))
+
+    note_files = [f for f in os.listdir(data_dir) if f.endswith('.json')]
+    
+    if not note_files:
+        CTk.CTkLabel(notes_list_main_frame, text="No notes found.", text_color="gray").pack(pady=5)
+    else:
+        note_files_sorted = sorted(note_files, key=lambda f: os.path.getmtime(os.path.join(data_dir, f)), reverse=True)
+
+        for note_file in note_files_sorted:
+            note_name = note_file.replace(".json", "")
+            btn = CTk.CTkButton(notes_list_main_frame, text=note_name, 
+                                command=lambda nf=note_file: load_note_and_return_to_textbox(os.path.join(data_dir, nf)),
+                                fg_color='transparent', hover_color="#48b5ff",
+                                anchor="w")
+            btn.pack(fill="x", pady=2, padx=10)
+
+def load_note_and_return_to_textbox(file_path):
+    load_note(file_path)
+    set_current_view("textbox")
+
+textbox.bind("<KeyRelease>", save_note_debounced)
+
+textbox.bind('<Command-BackSpace>', delete_line)
+textbox.bind('<Control-BackSpace>', delete_line)
+window.bind('<Command-s>', lambda event: open_mini())
+window.bind('<Control-s>', lambda event: open_mini())
+
 def save_theme(theme_name):
     try:
         with open(settings_path, "w") as f:
@@ -604,7 +815,6 @@ def save_theme(theme_name):
     except Exception as e:
         print(f"Error saving theme: {e}")
 
-# Function to load the saved theme
 def load_theme():
     try:
         if os.path.exists(settings_path):
@@ -617,7 +827,6 @@ def load_theme():
         print(f"Error loading theme: {e}")
         return DEFAULT_THEME
 
-# Apply the theme when the app starts
 def apply_saved_theme():
     saved_theme = load_theme()
     if saved_theme == "dark":
@@ -636,10 +845,15 @@ def apply_saved_theme():
         color_change_green()
     elif saved_theme == "pink":
         color_change_pink()
+    elif saved_theme == "earthy":
+        color_change_earthy()
+    elif saved_theme == "velvet":
+        color_change_velvet()
+    elif saved_theme == "menlon":
+        color_change_menlon()
     else:
-        color_change_JoltNotes() # set default.
+        color_change_JoltNotes()
 
-# Call apply_saved_theme when the app starts
 apply_saved_theme()
 
 load_note()
