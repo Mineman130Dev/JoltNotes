@@ -1,10 +1,28 @@
-# JoltNotes Lite
+# JoltNotes
 
-**Simple, minimalist note-taking for macOS**
+**Simple, minimalist note-taking for macOS and Windows**
 
-## About JoltNotes Lite
+## About JoltNotes
 
-JoltNotes Lite is an ultra-minimalist note-taking application designed for simplicity. It features a single textbox that fills the entire window, allowing you to focus solely on your thoughts. With automatic saving on each keystroke and instant loading when you launch the app, JoltNotes Lite eliminates distractions and gets out of your way.
+### JoltNotes is an ultra-minimalist note-taking application designed for simplicity and instant access to your thoughts.
+
+- It features a single textbox that fills nearly the entire window, keeping your focus solely on your content.
+
+- Automatic saving activates after just one second of inactivity, ensuring your work is always safe.
+
+- Your notes load instantly when you launch the app, seamlessly picking up where you left off.
+
+- The toolbar above the textbox allows you to easily format your text with bold, italic, underline, and ~~strikethrough~~ styles.
+
+- Condense your headings with the "H" dropdown button on the toolbar, offering H1, H2, and H3 options.
+
+- Personalize your experience by choosing from a vibrant array of themes accessible via the ⚙️ (Settings) icon. Themes include "Dark Mode," "Light Mode," "Terminal Amber," "Pretty Pink," and "Red Velvet."
+
+- Apple Silicon Exclusive: On M1, M2, and newer Apple Silicon Macs, a special "Silicon" theme is automatically applied, reflecting the chip's distinctive aesthetic.
+
+- A compact "Mini Jolt" window provides a stripped-down, always-on-top view for quick notes without cluttering your main workspace.
+
+JoltNotes eliminates distractions and gets out of your way, letting you focus on what truly matters: **your thoughts**.
 
 ## Key Features
 
@@ -17,18 +35,18 @@ JoltNotes Lite is an ultra-minimalist note-taking application designed for simpl
 
 ### System Requirements
 
-- macOS on Intel-based Macs
-- Tested on macOS Sequoia 15.3.2 and Monterey 12.7.6
+- macOS Intel-based: macOS Monterey or later
+- macOS Silicon-based: Apple M1 Chip or later
 
 ## Resolving macOS Security Warnings
 
-When first launching JoltNotes Lite, you may encounter a security warning stating "JoltNotesLite is damaged and can't be opened." This is due to macOS Gatekeeper security features.
+When first launching JoltNotes, you may encounter a security warning stating "JoltNotes is damaged and can't be opened." This is due to macOS Gatekeeper security features.
 
 ### Option 1: Using System Settings
 
 1. Try to open the app
 2. Go to System Settings > Privacy & Security
-3. Look for a message about JoltNotesLite and click "Open Anyway"
+3. Look for a message about JoltNotes and click "Open Anyway"
 
 ### Option 2: Using Terminal
 
@@ -43,17 +61,17 @@ If the "Open Anyway" button doesn't appear, you can use Terminal:
 
 Run this command (you'll need to enter your password):
 
-`sudo xattr -dr com.apple.quarantine JoltNotesLite.app`
+`sudo xattr -dr com.apple.quarantine JoltNotes.app`
 
-Try opening JoltNotes Lite again
+Try opening JoltNotes again
 
 > Note: Commands using **sudo** require administrator privileges. Only use Terminal commands if you understand their function. The developer will explore Apple's code signing and notarization process in future releases for a smoother experience.
 
-# Using JoltNotes Lite
+# Using JoltNotes
 
 ## Starting a Note:
 
-Simply click anywhere in the window and start typing
+Simply click anywhere in the window and start typing (Multiple notes are planned for later release)
 
 ## Saving Your Work:
 
@@ -63,20 +81,6 @@ No save button needed - your note automatically saves every one second without a
 
 Your previous note loads automatically when you launch the app
 
-### About the JoltNotes Family
-
-JoltNotes Lite is part of the JoltNotes application family:
-
-- **JoltNotes** - Our upcoming full-featured note-taking application
-- **JoltNotes Lite** - This simplified, single-note version
-- **JoltminiNotes** - Our compact sticky-notes style application
-
 ## Support and Feedback
 
 If you encounter issues or have suggestions for improvement, please open an issue on our GitHub repository.
-
-###
-
-#
-
-_JoltNotes Lite is currently built for Intel-based Macs only. Apple Silicon support is planned for future releases._
