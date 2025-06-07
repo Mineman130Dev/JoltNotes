@@ -8,7 +8,7 @@ from customtkinter import CTkFont
 import webbrowser
 
 window = CTk.CTk()
-window.title("JoltNotes Lite - macOS(Intel)")
+window.title("JoltNotes v0.3.0-alpha.0")
 
 mini_window = None
 mini_textbox = None
@@ -44,7 +44,7 @@ text = textbox.get("0.0", "end")
 textbox.delete("0.0", "end") 
 current_font = CTkFont(family="Helvetica", size=12)
 
-app_name = "JoltNotes Lite"
+app_name = "JoltNotes"
 app_author = "Mineman130"
 data_dir = user_data_dir(app_name, app_author)
 os.makedirs(data_dir, exist_ok=True)
@@ -151,6 +151,8 @@ def color_change_JoltNotes():
     settings_menu_button.configure(text_color='white')
     settings_menu_button.configure(hover_color='#48b5ff')
     website_button.configure(text_color='white')
+    settings_frame.configure(fg_color='#171717')
+    notes_list_main_frame.configure(fg_color='#171717')
     if mini_window != None:
         mini_window.configure(fg_color='#171717')
     if mini_textbox != None:
@@ -159,37 +161,6 @@ def color_change_JoltNotes():
     save_theme("JoltNotes")
 
 def color_change_dark():
-    toolbar.configure(fg_color='#171717')
-    window.configure(fg_color='#171717')
-    textbox.configure(fg_color='#171717', text_color='white')
-    theme_label.configure(text_color='white')
-    bold_button.configure(text_color='white')
-    bold_button.configure(hover_color='#48b5ff')
-    italic_button.configure(text_color='white')
-    italic_button.configure(hover_color='#48b5ff')
-    underline_button.configure(text_color='white')
-    underline_button.configure(hover_color='#48b5ff')
-    heading_button.configure(text_color='white')
-    heading_button.configure(hover_color='#48b5ff')
-    heading2_button.configure(text_color='white')
-    heading2_button.configure(hover_color='#48b5ff')
-    heading3_button.configure(text_color='white')
-    heading3_button.configure(hover_color='#48b5ff')
-    strickethrough_button.configure(text_color='white')
-    strickethrough_button.configure(hover_color='#48b5ff')
-    menu_button.configure(text_color='white')
-    menu_button.configure(hover_color='#48b5ff')
-    settings_menu_button.configure(text_color='white')
-    settings_menu_button.configure(hover_color='#48b5ff')
-    website_button.configure(text_color='white')
-    if mini_window != None:
-        mini_window.configure(fg_color='#171717')
-    if mini_textbox != None:
-        mini_textbox.configure(text_color='white')
-        mini_textbox.configure(fg_color='#171717')
-    save_theme("dark")
-
-def color_change_super_dark():
     toolbar.configure(fg_color='black')
     window.configure(fg_color='black')
     textbox.configure(fg_color='black', text_color='white')
@@ -213,14 +184,16 @@ def color_change_super_dark():
     settings_menu_button.configure(text_color='white')
     settings_menu_button.configure(hover_color='#48b5ff')
     website_button.configure(text_color='white')
+    settings_frame.configure(fg_color='black')
+    notes_list_main_frame.configure(fg_color='black')
     if mini_window != None:
         mini_window.configure(fg_color='black')
     if mini_textbox != None:
         mini_textbox.configure(text_color='white')
         mini_textbox.configure(fg_color='black')
-    save_theme("super_dark")
+    save_theme("dark")
 
-def color_change_white():
+def color_change_light():
     toolbar.configure(fg_color='#F1F1F1')
     window.configure(fg_color='#F1F1F1')
     textbox.configure(fg_color='white', text_color='black')
@@ -244,12 +217,14 @@ def color_change_white():
     settings_menu_button.configure(text_color='black')
     settings_menu_button.configure(hover_color='#48b5ff')
     website_button.configure(text_color='white')
+    settings_frame.configure(fg_color='#e3e3e3')
+    notes_list_main_frame.configure(fg_color='#e3e3e3')
     if mini_window != None:
         mini_window.configure(fg_color='#F1F1F1')
     if mini_textbox != None:
         mini_textbox.configure(text_color='black')
         mini_textbox.configure(fg_color='#F1F1F1')
-    save_theme("white")
+    save_theme("light")
 
 def color_change_earth():
     toolbar.configure(fg_color='#a0aec0')
@@ -275,6 +250,8 @@ def color_change_earth():
     settings_menu_button.configure(text_color='#4a5568')
     settings_menu_button.configure(hover_color='white')
     website_button.configure(text_color='white')
+    settings_frame.configure(fg_color='#f5f5f5')
+    notes_list_main_frame.configure(fg_color='#f5f5f5')
     if mini_window != None:
         mini_window.configure(fg_color='#f5f5f5')
     if mini_textbox != None:
@@ -306,6 +283,8 @@ def color_change_orange():
     settings_menu_button.configure(text_color='#FFB000')
     settings_menu_button.configure(hover_color='#bd8200')
     website_button.configure(text_color='#FFB000')
+    settings_frame.configure(fg_color='#282828')
+    notes_list_main_frame.configure(fg_color='#282828')
     if mini_window != None:
         mini_window.configure(fg_color='#282828')
     if mini_textbox != None:
@@ -337,6 +316,8 @@ def color_change_green():
     settings_menu_button.configure(text_color='#00FF66')
     settings_menu_button.configure(hover_color='#00b849')
     website_button.configure(text_color='#00FF66')
+    settings_frame.configure(fg_color='#282828')
+    notes_list_main_frame.configure(fg_color='#282828')
     if mini_window != None:
         mini_window.configure(fg_color='#282828')
     if mini_textbox != None:
@@ -368,6 +349,8 @@ def color_change_pink():
     settings_menu_button.configure(text_color='black')
     settings_menu_button.configure(hover_color='white')
     website_button.configure(text_color='white')
+    settings_frame.configure(fg_color='#FFC1DA')
+    notes_list_main_frame.configure(fg_color='#FFC1DA')
     if mini_window != None:
         mini_window.configure(fg_color='#FFC1DA')
     if mini_textbox != None:
@@ -400,6 +383,8 @@ def color_change_earthy():
     settings_menu_button.configure(hover_color='#c5e3ba')
     website_button.configure(text_color='#8A784E')
     website_button.configure(hover_color='#c5e3ba')
+    settings_frame.configure(fg_color='#c5e3ba')
+    notes_list_main_frame.configure(fg_color='#c5e3ba')
     if mini_window != None:
         mini_window.configure(fg_color='#E7EFC7')
     if mini_textbox != None:
@@ -432,6 +417,8 @@ def color_change_velvet():
     settings_menu_button.configure(hover_color='#85193C')
     website_button.configure(text_color='white')
     website_button.configure(hover_color='#85193C')
+    settings_frame.configure(fg_color='#85193C')
+    notes_list_main_frame.configure(fg_color='#85193C')
     if mini_window != None:
         mini_window.configure(fg_color='#85193C')
     if mini_textbox != None:
@@ -464,6 +451,8 @@ def color_change_menlon():
     settings_menu_button.configure(hover_color='#ECFFE6')
     website_button.configure(text_color='#399918')
     website_button.configure(hover_color='#ECFFE6')
+    settings_frame.configure(fg_color='#FFAAAA')
+    notes_list_main_frame.configure(fg_color='#FFAAAA')
     if mini_window != None:
         mini_window.configure(fg_color='#FFAAAA')
     if mini_textbox != None:
@@ -474,9 +463,8 @@ def color_change_menlon():
 # Theme button
 theme_buttons = [
     ("JoltNotes", color_change_JoltNotes, 'white'),
-    ("Dark", color_change_dark, 'white'),
-    ("Super Dark", color_change_super_dark, 'white'),
-    ("Arctic White", color_change_white, 'white'),
+    ("Dark Mode", color_change_dark, 'white'),
+    ("Light Mode", color_change_light, 'white'),
     ("Mutted Earth", color_change_earth, 'white'),
     ("Terminal Amber", color_change_orange, 'white'),
     ("Terminal Green", color_change_green, 'white'),
@@ -709,7 +697,6 @@ def set_current_view(view_name):
     current_view = view_name
     print(f"Current view set to: {current_view}")
 
-# --- Modified Toggle Functions ---
 def toggle_settings():
     if current_view == "settings":
         set_current_view("textbox")
@@ -760,7 +747,7 @@ italic_button.pack(side='right', padx=5)
 bold_button = CTk.CTkButton(toolbar, text='B', command=bold_text, fg_color='transparent', hover_color="#48b5ff", width=30)
 bold_button.pack(side='right', padx=5)
 
-menu_button = CTk.CTkButton(toolbar, text='<', command=toggle_notes_list, fg_color='transparent', hover_color="#48b5ff", width=30)
+menu_button = CTk.CTkButton(toolbar, text='Menu', command=toggle_notes_list, fg_color='transparent', hover_color="#48b5ff", width=30)
 menu_button.pack(side='left', padx=5)
 
 settings_menu_button = CTk.CTkButton(toolbar, text='⚙️', command=toggle_settings, fg_color='transparent', hover_color="#48b5ff", width=30)
@@ -831,12 +818,10 @@ def apply_saved_theme():
     saved_theme = load_theme()
     if saved_theme == "dark":
         color_change_dark()
-    elif saved_theme == "super_dark":
-        color_change_super_dark()
     elif saved_theme == "JoltNotes":
         color_change_JoltNotes()
     elif saved_theme == "white":
-        color_change_white()
+        color_change_light()
     elif saved_theme == "earth":
         color_change_earth()
     elif saved_theme == "orange":
